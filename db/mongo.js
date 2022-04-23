@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 require('dotenv').config()
 
-const url = process.env.MONGODB_URI
+const url = 'mongodb+srv://fullstack:12345@cluster0.pbhgs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 
   mongoose.connect(url)
 
