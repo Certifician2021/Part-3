@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./db/mongo')
+
 
 app.use(cors())
 app.use(express.json())
@@ -19,53 +21,39 @@ app.use(morgan((tokens, req, res) => {
   ].join(' ')
 }))
 
-let persons = [
-    { 
-      id: 1,
-      name: "Arto Hellas", 
-      number: "040-123456"
-    },
-    { 
-      id: 2,
-      name: "Ada Lovelace", 
-      number: "39-44-5323523"
-    },
-    { 
-      id: 3,
-      name: "Dan Abramov", 
-      number: "12-43-234345"
-    },
-    { 
-      id: 4,
-      name: "Mary Poppendieck", 
-      number: "39-23-6423122"
-    }
-]
+
+app.put('/api/persons/:id', (request, response) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true,runValidators: true, context: 'query' })
+    .then(updatedperson => {
+      response.json(updatedperson)
+    })
+    .catch(error => next(error))
+})
+
+
 app.get('/', (request, response) => {
   response.sendFile(path.join(__dirname, 'build/index.html'));
 })
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then(result=>{
+       response.json(result)
+  })
 })
 
 
 app.get('/info', (request, response) =>{
-   
-    response.send(`<h3>Phonebook has Info of ${persons.length} persons </h3>
+    response.send(`<h3>Phonebook has Info of ${Person.length} persons </h3>
     <p>${new Date()}</p>`)
 
 })
-
-
-
-const generateId = () => {
-    const nextId = persons.length > 0
-      ? Math.floor(Math.random() * 10000) + 1
-      : 0
-
-    return nextId
-  }
   
 
   app.post('/api/persons', (request, response) => {
@@ -77,37 +65,41 @@ const generateId = () => {
       })
     }
 
-    const person = {
+    const person = new Person ({
       name: body.name,
-      number: body.number,
-      id: generateId(),
+      number: body.number
     }
-    persons = persons.concat(person)
-  
-    response.json(person)
+    )
+   person.save(person).then(person => {
+     response.json(person)
+   })
     
   })
 
 
 
-app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(note => note.id === id)
-    if (person) {
-        response.json(person)
-      } else {
+app.get('/api/persons/:id', (request, response) => {  
+  Person.findById(request.params.id).then(res=>{
+      if(res){
+        response.json(res)
+      }else{
         response.status(404).end()
       }
+    }).catch(err=>{
+      console.log(err)
+      response.status(400).send({error: "malformatted id"})
+    })
   })
 
   app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    persons = persons.filter(person => person.id !== id)
-  
-    response.status(204).end()
+    Person.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
   })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:ui": "rmdir -rf build &&  npm run build && Xcopy /build ../../part3 /E /H /C /I",
+    "build:ui": "rmdir build && cd ../part2/phonebook && npm run build && Xcopy /build ../../part3 /E /H /C /I",
     "deploy": "git push heroku HEAD:master --force",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",    
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
     "logs:prod": "heroku logs --tail",
     "start": "node index.js",
     "dev": "nodemon index.js",
@@ -16,7 +16,9 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "mongoose": "^6.3.1",
     "morgan": "^1.10.0"
   },
   "devDependencies": {

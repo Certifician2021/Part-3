@@ -14,3 +14,6 @@ GET http://localhost:3001/info
 
 ###
 DELETE http://localhost:3001/api/persons/4
+
+###
+GET http://localhost:3001/api/persons/
