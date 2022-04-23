@@ -30,7 +30,7 @@ app.put('/api/persons/:id', (request, response) => {
     number: body.number
   }
 
-  Person.findByIdAndUpdate(request.params.id, person, { new: true,runValidators: true, context: 'query' })
+  Person.findByIdAndUpdate(request.params.id, person, { new: true, runValidators: true, context: 'query' })
     .then(updatedperson => {
       response.json(updatedperson)
     })
@@ -99,7 +99,7 @@ app.get('/api/persons/:id', (request, response) => {
     .catch(error => next(error))
   })
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
