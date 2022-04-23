@@ -40,7 +40,7 @@ let persons = [
     }
 ]
 app.get('/', (request, response) => {
-  response.send('<h1>Hello World!</h1>')
+  response.sendFile(path.join(__dirname, 'build/index.html'));
 })
 
 app.get('/api/persons', (request, response) => {
