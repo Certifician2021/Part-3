@@ -2,8 +2,7 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 
 
-const url = 'mongodb+srv://fullstack:12345@cluster0.pbhgs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-
+const url = process.env.MONGODB_URI
   mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
