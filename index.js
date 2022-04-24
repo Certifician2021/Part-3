@@ -1,4 +1,5 @@
 const express = require('express')
+const bodyParser = require('body-parser');
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
@@ -9,7 +10,7 @@ require('dotenv').config()
 
 app.use(cors())
 app.use(express.static('build'))
-app.use(express.json())
+app.use(bodyParser.json())
 
 
 app.use(morgan((tokens, req, res) => {
@@ -44,7 +45,7 @@ app.put('/api/persons/:id', (request, response) => {
 
 
 app.get('/api/persons', (request, response) => {
-  Person.find({}).then(result=> response.json(result))
+  Person.find({}).then(persons=> response.json(persons))
 })
 
 
