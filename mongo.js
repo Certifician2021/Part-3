@@ -9,13 +9,13 @@ const personSchema = new mongoose.Schema({
   name: {
     type: String,
     minlength: 3,
-    required: true,
+    required: [true, 'Please provide a name...'],
     unique: true
   },
   number: {
     type: String,
     minlength: 8,
-    required: true
+    required: [true, 'Please provide a number']
   }
   }).set('toJSON', {
     transform: (document, returnedObject) => {
