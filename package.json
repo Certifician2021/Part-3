@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build",
     "logs:prod": "heroku logs --tail",
     "start": "node index.js",
     "dev": "nodemon index.js",
@@ -20,6 +21,7 @@
     "morgan": "^1.10.0",
     "node": "^16.14.2"
   },
+
   "engines": {
     "node": "16.14.2",
     "npm": "8.5.0"

@@ -3,7 +3,7 @@ require('dotenv').config()
 
 
 const url = process.env.MONGODB_URI
-  mongoose.connect(url)
+  mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
 
 const personSchema = new mongoose.Schema({
   name: {
