@@ -1,9 +1,5 @@
 const mongoose = require('mongoose')
 require('dotenv').config()
-const uniqueValidator = require('mongoose-unique-validator');
-
-mongoose.set('useFindAndModify', false)
-mongoose.set('useCreateIndex', true)
 
 
 const url = 'mongodb+srv://fullstack:12345@cluster0.pbhgs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
@@ -30,7 +26,6 @@ const personSchema = new mongoose.Schema({
     }
   })
   
-  personSchema.plugin(uniqueValidator);
   module.exports = mongoose.model('Person', personSchema)
 
 

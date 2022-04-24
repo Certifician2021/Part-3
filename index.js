@@ -9,7 +9,7 @@ require('dotenv').config()
 
 app.use(cors())
 app.use(express.json())
-app.use(express.static("build"))
+app.use(express.static('build'))
 
 app.use(morgan((tokens, req, res) => {
   return [
@@ -22,6 +22,9 @@ app.use(morgan((tokens, req, res) => {
   ].join(' ')
 }))
 
+app.get('/', (request, response) => {
+  response.sendFile(path.join(__dirname, 'build/index.html'));
+})
 
 app.put('/api/persons/:id', (request, response) => {
   const body = request.body
