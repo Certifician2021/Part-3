@@ -1,9 +1,10 @@
-require('dotenv').config()
 const mongoose = require('mongoose')
+require('dotenv').config()
 
-const url = process.env.MONGODB_URI
 
-  mongoose.connect(url,  { useNewUrlParser: true, useUnifiedTopology: true })
+const url = 'mongodb+srv://fullstack:12345@cluster0.pbhgs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+
+  mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
     name: String,

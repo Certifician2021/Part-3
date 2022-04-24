@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
-const Person = require('./db/mongo')
+const Person = require('./mongo')
 
 
 app.use(cors())
@@ -44,7 +44,7 @@ app.get('/', (request, response) => {
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(result=>{
-       response.json(result.map(res =>  res.toJSON()))
+       response.json(result)
   })
 })
 
