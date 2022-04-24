@@ -1,16 +1,14 @@
-const express = require('express')
+const express = require('express');
 const bodyParser = require('body-parser');
-const app = express()
-const morgan = require('morgan')
-const cors = require('cors')
-const Person = require('./mongo')
-const path = require('path')
-require('dotenv').config()
-
-
-app.use(cors())
-app.use(express.static('build'))
-app.use(bodyParser.json())
+const app = express();
+const morgan = require('morgan');
+const cors = require('cors');
+const Person = require('./mongo');
+const path = require('path');
+require('dotenv').config();
+app.use(cors());
+app.use(express.static('build'));
+app.use(bodyParser.json());
 
 
 app.use(morgan((tokens, req, res) => {
