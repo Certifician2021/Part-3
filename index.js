@@ -8,8 +8,9 @@ require('dotenv').config()
 
 
 app.use(cors())
-app.use(express.json())
 app.use(express.static('build'))
+app.use(express.json())
+
 
 app.use(morgan((tokens, req, res) => {
   return [
@@ -38,14 +39,12 @@ app.put('/api/persons/:id', (request, response) => {
     .then(updatedperson => {
       response.json(updatedperson)
     })
-    .catch(error => console.log(error.response.body))
+    .catch(error => console.log(error.name))
 })
 
 
 app.get('/api/persons', (request, response) => {
-  Person.find({}).then(result=>{
-       response.json(res => res.toJSON())
-  })
+  Person.find({}).then(result=> response.json(result))
 })
 
 
@@ -70,12 +69,6 @@ app.get('/info', (request, response) =>{
   app.post('/api/persons', (request, response) => {
     const body = request.body
 
-    if (Object.keys(body).length === 0) {
-      return response.status(400).json({
-        error: 'content missing'
-      })
-  }
-
 
     const person = new Person ({
       name: body.name,
@@ -84,7 +77,7 @@ app.get('/info', (request, response) =>{
     )
    person.save(person).then(person => {
      response.json(person)
-   }).catch(error => console.log(error))
+   }).catch(error => console.log(error.name))
     
   })
 
@@ -97,7 +90,7 @@ app.get('/api/persons/:id', (request, response) => {
       }else{
         response.status(404).end()
       }
-    }).catch(error => console.log(error))
+    }).catch(error => console.log(error.name))
   })
 
   app.delete('/api/persons/:id', (request, response) => {
@@ -105,11 +98,12 @@ app.get('/api/persons/:id', (request, response) => {
     .then(result => {
       response.status(204).end()
     })
-    .catch(error => console.log(error))
+    .catch(error => console.log(error.name))
   })
 
 
-const PORT = process.env.PORT
+
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
