@@ -4,9 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:ui": "rmdir build && cd ../part2/phonebook && npm run build && Xcopy /build ../../part3 /E /H /C /I",
-    "deploy": "git push heroku HEAD:master --force",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
     "logs:prod": "heroku logs --tail",
     "start": "node index.js",
     "dev": "nodemon index.js",

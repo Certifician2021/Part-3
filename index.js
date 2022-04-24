@@ -3,6 +3,7 @@ const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./mongo')
+const path = require('path')
 require('dotenv').config()
 
 
@@ -21,6 +22,9 @@ app.use(morgan((tokens, req, res) => {
   ].join(' ')
 }))
 
+app.get('/', (request, response) => {
+  response.sendFile(path.join(__dirname, 'build/index.html'));
+})
 
 app.put('/api/persons/:id', (request, response) => {
   const body = request.body
@@ -38,9 +42,7 @@ app.put('/api/persons/:id', (request, response) => {
 })
 
 
-app.get('/', (request, response) => {
-  response.sendFile(path.join(__dirname, 'build/index.html'));
-})
+
 
 
 app.get('/api/persons', (request, response) => {
