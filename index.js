@@ -47,7 +47,7 @@ app.put('/api/persons/:id', (request, response) => {
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(result=>{
-       response.json(result.map(res => res.toJSON()))
+       response.json(result)
   })
 })
 
