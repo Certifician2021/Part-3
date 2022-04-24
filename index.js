@@ -6,7 +6,6 @@ const Person = require('./db/mongo')
 
 
 app.use(cors())
-app.use(express.json())
 app.use(express.static('build'))
 app.use(express.json())
 
@@ -34,7 +33,7 @@ app.put('/api/persons/:id', (request, response) => {
     .then(updatedperson => {
       response.json(updatedperson)
     })
-    .catch(error => next(error))
+    .catch(error => console.log(error.response.body))
 })
 
 
@@ -42,16 +41,28 @@ app.get('/', (request, response) => {
   response.sendFile(path.join(__dirname, 'build/index.html'));
 })
 
+
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(result=>{
-       response.json(result)
+       response.json(result.map(res =>  res.toJSON()))
   })
 })
 
 
 app.get('/info', (request, response) =>{
-    response.send(`<h3>Phonebook has Info of ${Person.length} persons </h3>
-    <p>${new Date()}</p>`)
+  const currentDate = new Date().toLocaleString();
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  Person.find({}).then(persons => {
+      response.send(
+          `
+          <div>
+              <p>Phonebook has info for ${persons.length} people</p>
+          </div>
+          <div>
+              <p>${currentDate} (${timeZone})</p>
+          </div>`
+      )
+      })
 
 })
   
@@ -59,11 +70,12 @@ app.get('/info', (request, response) =>{
   app.post('/api/persons', (request, response) => {
     const body = request.body
 
-    if (!body.name || !body.number) {
-      return response.status(400).json({ 
-        error: 'data missing' 
+    if (Object.keys(body).length === 0) {
+      return response.status(400).json({
+        error: 'content missing'
       })
-    }
+  }
+
 
     const person = new Person ({
       name: body.name,
@@ -72,7 +84,7 @@ app.get('/info', (request, response) =>{
     )
    person.save(person).then(person => {
      response.json(person)
-   })
+   }).catch(error => console.log(error.response.body))
     
   })
 
@@ -85,10 +97,7 @@ app.get('/api/persons/:id', (request, response) => {
       }else{
         response.status(404).end()
       }
-    }).catch(err=>{
-      console.log(err)
-      response.status(400).send({error: "malformatted id"})
-    })
+    }).catch(error => console.log(error.response.body))
   })
 
   app.delete('/api/persons/:id', (request, response) => {
@@ -96,8 +105,9 @@ app.get('/api/persons/:id', (request, response) => {
     .then(result => {
       response.status(204).end()
     })
-    .catch(error => next(error))
+    .catch(error => console.log(error.response.body))
   })
+
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
