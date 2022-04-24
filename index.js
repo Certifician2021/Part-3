@@ -44,7 +44,7 @@ app.get('/', (request, response) => {
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(result=>{
-       response.json(result)
+       response.json(result.map(res => res.toJSON()))
   })
 })
 
@@ -84,7 +84,7 @@ app.get('/info', (request, response) =>{
     )
    person.save(person).then(person => {
      response.json(person)
-   }).catch(error => console.log(error.response.body))
+   }).catch(error => console.log(error))
     
   })
 
@@ -97,7 +97,7 @@ app.get('/api/persons/:id', (request, response) => {
       }else{
         response.status(404).end()
       }
-    }).catch(error => console.log(error.response.body))
+    }).catch(error => console.log(error))
   })
 
   app.delete('/api/persons/:id', (request, response) => {
@@ -105,7 +105,7 @@ app.get('/api/persons/:id', (request, response) => {
     .then(result => {
       response.status(204).end()
     })
-    .catch(error => console.log(error.response.body))
+    .catch(error => console.log(error))
   })
 
 
