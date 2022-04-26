@@ -14,10 +14,19 @@ const personSchema = new mongoose.Schema({
   },
   number: {
     type: String,
+    validate: {
+      validator: function(v) {
+        return /\d{3}-\d{5}/.test(v);
+      },
+      message: props => `${props.value} is not a valid phone number!`
+    },
     minlength: 8,
     required: [true, 'Please provide a number']
   }
-  }).set('toJSON', {
+  })
+  
+  
+  personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
       returnedObject.id = returnedObject._id.toString()
       delete returnedObject._id
